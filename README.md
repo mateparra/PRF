@@ -14,4 +14,4 @@ El proyecto integra los siguientes componentes:
 - **Creacion y despliegue de imagenes docker**
 - **Gestion de repositorios y ramas** en git.
 
-Para detalles sobre la implementacion, consulte la rama `amazonbds`.
+Para detalles sobre la implementacion, consulte la rama `amazoneds`.

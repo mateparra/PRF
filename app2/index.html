@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Challenge</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      margin: 20px;
+    }
+    #gameContainer {
+      width: 100vw;
+      height: 80vh;
+      position: relative;
+      margin: 0 auto;
+      border: 2px solid #333;
+      background-color: #fff;
+    }
+    .circle {
+      width: 50px;
+      height: 50px;
+      background-color: #ff5722;
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+    .scoreboard {
+      font-size: 20px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>¡Haz clic en el círculo!</h1>
+  <div class="scoreboard">Puntos: <span id="score">0</span></div>
+  <div id="gameContainer"></div>
+  <script>
+    const gameContainer = document.getElementById('gameContainer');
+    const scoreElement = document.getElementById('score');
+    let score = 0;
+    let timeoutId;
+
+    // Crear círculo
+    function createCircle() {
+      // Eliminar círculo previo si existe
+      const oldCircle = document.querySelector('.circle');
+      if (oldCircle) {
+        oldCircle.remove();
+      }
+
+      // Crear nuevo círculo
+      const circle = document.createElement('div');
+      circle.classList.add('circle');
+      const containerRect = gameContainer.getBoundingClientRect();
+      const size = 50;
+
+      // Posiciones aleatorias dentro del contenedor
+      const x = Math.random() * (containerRect.width - size);
+      const y = Math.random() * (containerRect.height - size);
+
+      circle.style.left = `${x}px`;
+      circle.style.top = `${y}px`;
+
+      // Agregar evento de clic
+      circle.addEventListener('click', () => {
+        score++;
+        scoreElement.textContent = score;
+        createCircle();
+      });
+
+      // Agregar el círculo al contenedor
+      gameContainer.appendChild(circle);
+
+      // Eliminar círculo automáticamente después de 2 segundos si no se hace clic
+      timeoutId = setTimeout(() => {
+        if (circle.parentElement) {
+          circle.remove();
+          alert('¡Perdiste! Puntos totales: ' + score);
+          resetGame();
+        }
+      }, 2000);
+    }
+
+    // Reiniciar el juego
+    function resetGame() {
+      clearTimeout(timeoutId);
+      score = 0;
+      scoreElement.textContent = score;
+      createCircle();
+    }
+
+    // Iniciar el juego al cargar
+    createCircle();
+  </script>
+</body>
+</html>

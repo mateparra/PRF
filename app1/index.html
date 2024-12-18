@@ -1,10 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>App1</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego Simple</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+    }
+    h1 {
+      text-align: center;
+    }
+    #gameContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 80vh;
+      position: relative;
+      border: 2px solid #333;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .player {
+      width: 50px;
+      height: 50px;
+      background-color: #4caf50;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .target {
+      width: 30px;
+      height: 30px;
+      background-color: #f44336;
+      position: absolute;
+    }
+    .score {
+      text-align: center;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Bienvenido a App1</h1>
-    <p>Esta es la primera aplicación.</p>
+  <h1>¡Atrapa el objetivo!</h1>
+  <div class="score">Puntos: <span id="score">0</span></div>
+  <div id="gameContainer">
+    <div class="player" id="player"></div>
+    <div class="target" id="target"></div>
+  </div>
+  <script>
+    const player = document.getElementById('player');
+    const target = document.getElementById('target');
+    const scoreElement = document.getElementById('score');
+    let score = 0;
+
+    // Movimiento del jugador
+    document.addEventListener('keydown', (e) => {
+      const step = 10;
+      const rect = player.getBoundingClientRect();
+      const containerRect = document.getElementById('gameContainer').getBoundingClientRect();
+
+      if (e.key === 'ArrowUp' && rect.top > containerRect.top) {
+        player.style.top = `${rect.top - step - containerRect.top}px`;
+      } else if (e.key === 'ArrowDown' && rect.bottom < containerRect.bottom) {
+        player.style.top = `${rect.top + step - containerRect.top}px`;
+      } else if (e.key === 'ArrowLeft' && rect.left > containerRect.left) {
+        player.style.left = `${rect.left - step - containerRect.left}px`;
+      } else if (e.key === 'ArrowRight' && rect.right < containerRect.right) {
+        player.style.left = `${rect.left + step - containerRect.left}px`;
+      }
+    });
+
+    // Generar posición aleatoria para el objetivo
+    function randomPosition() {
+      const containerRect = document.getElementById('gameContainer').getBoundingClientRect();
+      const x = Math.random() * (containerRect.width - 30);
+      const y = Math.random() * (containerRect.height - 30);
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+    }
+
+    // Detectar colisiones
+    function checkCollision() {
+      const playerRect = player.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      if (
+        playerRect.left < targetRect.right &&
+        playerRect.right > targetRect.left &&
+        playerRect.top < targetRect.bottom &&
+        playerRect.bottom > targetRect.top
+      ) {
+        score++;
+        scoreElement.textContent = score;
+        randomPosition();
+      }
+    }
+
+    // Actualizar la posición del objetivo y revisar colisiones
+    randomPosition();
+    setInterval(checkCollision, 50);
+  </script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+version: '3.8'
+
+
+services:
+  app1:
+    build:
+      context: ./app1
+    image: app1_image:latest
+    volumes:
+      - /ebs-data/app1:/usr/share/nginx/html
+    networks:
+      - my-network
+
+
+  app2:
+    build:
+      context: ./app2
+    image: app2_image:latest
+    volumes:
+      - /ebs-data/app2:/usr/share/nginx/html
+    networks:
+      - my-network
+
+
+  nginx:
+    build:
+      context: ./nginx
+    image: nginx_image:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - app1
+      - app2
+    volumes:
+      - ./nginx/site.html:/usr/share/nginx/html/site.html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - my-network
+
+
+networks:
+  my-network:
+    driver: bridge

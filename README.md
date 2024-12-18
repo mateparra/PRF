@@ -3,7 +3,7 @@
 Este Repositorio contiene 2 ramas principales
 
 - `master`: contiene solo este readme
-- `amazonbds`:contiene todo el proyecto con NGINX, docker y aws ebs.
+- `amazoneds`:contiene todo el proyecto con NGINX, docker y aws ebs.
 
 ## Descripcion
 
